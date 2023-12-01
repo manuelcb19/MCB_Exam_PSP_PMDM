@@ -1,9 +1,12 @@
+ 
 
-
+import 'package:examenmcb/onBoarding/LoginView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:examenmcb/Splash/SplashView.dart';
+
+import 'onBoarding/RegisterView.dart';
 
 
 class ExamenMCB extends StatelessWidget{
@@ -15,8 +18,10 @@ Widget build(BuildContext context) {
     materialApp=MaterialApp(title: "KyTy Miau!",
       routes: {
         '/splashview':(context) => SplashView(),
+        '/loginview':(context) => LoginView(),
+        '/registerview':(context) => RegisterView(),
       },
-      initialRoute: '/splashview',
+      initialRoute: '/loginview',
     );
 
   return materialApp;
