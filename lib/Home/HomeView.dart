@@ -31,7 +31,9 @@ class _HomeViewState extends State<HomeView> {
       ),
       bottomNavigationBar: CustomButton(texto: (FirebaseAuth.instance.currentUser!.uid).toString(),),
       floatingActionButton:FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushNamed("/postcreateview");
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
       /**/

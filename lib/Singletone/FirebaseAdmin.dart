@@ -9,6 +9,13 @@ class FirebaseAdmin{
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore db = FirebaseFirestore.instance;
   FbUsuario? usuario;
+  //String uid = FirebaseAuth.instance.currentUser!.uid;
+
+
+  //String conseguiruid(){
+
+    //return uid;
+  //}
 
   Future<FbUsuario?> loadFbUsuario() async{
 
@@ -47,6 +54,25 @@ class FirebaseAdmin{
       {
         return false;
       }
+
+  }
+
+  Future<FbUsuario> conseguirUsuario() async {
+
+
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    print(uid);
+
+    DocumentReference<FbUsuario> enlace = db.collection("Usuarios").doc(
+        uid).withConverter(fromFirestore: FbUsuario.fromFirestore,
+      toFirestore: (FbUsuario usuario, _) => usuario.toFirestore(),);
+
+    FbUsuario usuario;
+
+    DocumentSnapshot<FbUsuario> docSnap = await enlace.get();
+    usuario = docSnap.data()!;
+
+    return usuario;
 
   }
 }
