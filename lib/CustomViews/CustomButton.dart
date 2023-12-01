@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
 
-  final Function? prueba;
+  final Function? funcion;
   final String texto;
   CustomButton({
     Key? key,
-    this.prueba,
+    this.funcion,
     required this.texto,
   }) : super(key: key);
 
@@ -14,8 +14,8 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        if (prueba != null) {
-          prueba!();
+        if (funcion != null) {
+          funcion!();
         }
       },
       child: Text(texto),

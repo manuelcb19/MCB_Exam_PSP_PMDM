@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:examenmcb/Splash/SplashView.dart';
 
+import 'onBoarding/PerfilView.dart';
 import 'onBoarding/RegisterView.dart';
 
 
@@ -20,6 +21,7 @@ Widget build(BuildContext context) {
         '/splashview':(context) => SplashView(),
         '/loginview':(context) => LoginView(),
         '/registerview':(context) => RegisterView(),
+        '/perfilview':(context) => PerfilView(),
       },
       initialRoute: '/loginview',
     );

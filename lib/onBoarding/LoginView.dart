@@ -2,15 +2,18 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examenmcb/CustomViews/CustomButton.dart';
+import 'package:examenmcb/Singletone/DataHolder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../CustomViews/CustomDialog.dart';
 import '../CustomViews/CustomTextField.dart';
+import '../FirebaseObjects/FbUsuario.dart';
 
 class LoginView extends StatelessWidget {
 
   FirebaseFirestore db = FirebaseFirestore.instance;
   late BuildContext _context;
+  DataHolder conexion = DataHolder();
 
   TextEditingController usuarioControlador = TextEditingController();
   TextEditingController usuarioPassword = TextEditingController();
@@ -21,24 +24,19 @@ class LoginView extends StatelessWidget {
 
   void onClickAceptar() async {
 
-
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: usuarioControlador.text,
+          password: usuarioPassword.text
+      );
     if (usuarioControlador.text.isEmpty || usuarioPassword.text.isEmpty) {
-
       CustomDialog.show(_context, "Existen algún campo vacío, por favor, compruébalo");
-    }
-
-    else {
+    } else {
       try {
+        FbUsuario? usuario= await DataHolder().fbadmin.usuario;
 
-        String uid=FirebaseAuth.instance.currentUser!.uid;
-        DocumentSnapshot<Map<String, dynamic>> datos = await
-            db.collection("Usuarios").doc(uid).get();
-
-        if (datos.exists){
+        if(usuario!=null){
           Navigator.of(_context).popAndPushNamed("/homeview");
-
         }
-
         else{
           Navigator.of(_context).popAndPushNamed("/perfilview");
         }
@@ -71,7 +69,7 @@ class LoginView extends StatelessWidget {
           shadowColor: Colors.orangeAccent,
           backgroundColor: Colors.orangeAccent,
         ),
-      backgroundColor: Colors.amber[200],
+        backgroundColor: Colors.amber[200],
         body:
         Center(
           child: ConstrainedBox(constraints: BoxConstraints(
@@ -97,8 +95,8 @@ class LoginView extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CustomButton(prueba: onClickAceptar, texto: "Login"),
-                    CustomButton(prueba: onClickRegistrar, texto: "Registrar"),
+                    CustomButton(funcion: onClickAceptar, texto: "Login"),
+                    CustomButton(funcion: onClickRegistrar, texto: "Registrar"),
                   ],
                 ),
 
