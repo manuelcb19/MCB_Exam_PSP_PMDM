@@ -32,14 +32,24 @@ class LoginView extends StatelessWidget {
       CustomDialog.show(_context, "Existen algún campo vacío, por favor, compruébalo");
     } else {
       try {
-        FbUsuario? usuario= await DataHolder().fbadmin.usuario;
 
+        if (await conexion.fbadmin.existenDatos()){
+          Navigator.of(_context).popAndPushNamed("/homeview");
+
+        }
+
+        else{
+          Navigator.of(_context).popAndPushNamed("/perfilview");
+        }
+/*
         if(usuario!=null){
           Navigator.of(_context).popAndPushNamed("/homeview");
         }
         else{
           Navigator.of(_context).popAndPushNamed("/perfilview");
         }
+        */
+
       } on FirebaseAuthException catch (e) {
 
         CustomDialog.show(_context, "Usuario o contraseña incorrectos");

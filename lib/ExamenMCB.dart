@@ -1,5 +1,6 @@
  
 
+import 'package:examenmcb/Home/HomeView.dart';
 import 'package:examenmcb/onBoarding/LoginView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -22,6 +23,7 @@ Widget build(BuildContext context) {
         '/loginview':(context) => LoginView(),
         '/registerview':(context) => RegisterView(),
         '/perfilview':(context) => PerfilView(),
+        '/homeview':(context) => HomeView(),
       },
       initialRoute: '/loginview',
     );

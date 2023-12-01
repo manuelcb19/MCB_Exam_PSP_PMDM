@@ -11,8 +11,8 @@ class FirebaseAdmin{
   FbUsuario? usuario;
 
   Future<FbUsuario?> loadFbUsuario() async{
+
     String uid=FirebaseAuth.instance.currentUser!.uid;
-    print("UID DE DESCARGA loadFbUsuario------------->>>> ${uid}");
     DocumentReference<FbUsuario> ref=db.collection("Usuarios")
         .doc(uid)
         .withConverter(fromFirestore: FbUsuario.fromFirestore,
@@ -20,16 +20,33 @@ class FirebaseAdmin{
 
 
     DocumentSnapshot<FbUsuario> docSnap=await ref.get();
-    print("docSnap DE DESCARGA loadFbUsuario------------->>>> ${docSnap.data()}");
     usuario=docSnap.data();
     return usuario;
   }
+
 
   Future<void> anadirUsuario(String nombre, int edad, String img) async {
 
     FbUsuario usuario = new FbUsuario(nombre: nombre, edad: edad, shint: img);
     String uidUsuario= FirebaseAuth.instance.currentUser!.uid;
     await db.collection("Usuarios").doc(uidUsuario).set(usuario.toFirestore());
+
+  }
+
+  Future<bool> existenDatos() async {
+
+    String uid=FirebaseAuth.instance.currentUser!.uid;
+    DocumentSnapshot<Map<String, dynamic>> datos = await
+    db.collection("Usuarios").doc(uid).get();
+
+    if(datos.exists)
+      {
+        return true;
+      }
+    else
+      {
+        return false;
+      }
 
   }
 }
