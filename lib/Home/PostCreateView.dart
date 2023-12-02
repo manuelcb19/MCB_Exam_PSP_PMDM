@@ -37,9 +37,7 @@ class _PostCreateViewState extends State<PostCreateView> {
  @override
   void initState() {
     super.initState();
-   // conseguirUsuario();
-
-     // Llama al método para cargar el usuario al iniciar la pantalla.
+    //conseguirUsuario();
   }
 
   void onGalleyClicked() async{
@@ -48,6 +46,7 @@ class _PostCreateViewState extends State<PostCreateView> {
     if(image!=null){
       setState(() {
         _imagePreview=File(image.path);
+        print(_imagePreview.toString());
       });
     }
 }
@@ -59,23 +58,22 @@ void onCameraClicked() async{
       setState(() {
         _imagePreview=File(image.path);
       });
-}
-
     }
+ }
 
+  void conseguirUsuario() async {
 
-  //void conseguirUsuario() async {
+    usuario = await conexion.fbadmin.conseguirUsuario();
 
-   // usuario = await conexion.fbadmin.conseguirUsuario();
-
- // }
+  }
 
   void subirPost() async {
 
     final storageRef = FirebaseStorage.instance.ref();
 
     String rutaEnNube=
-        "posts/"+FirebaseAuth.instance.currentUser!.uid+"/imgs/"+ DateTime.now().millisecondsSinceEpoch.toString()+".jpg";
+        "posts/"+FirebaseAuth.instance.currentUser!.uid+"/imgs/"+DateTime.now().millisecondsSinceEpoch.toString()+".jpg";
+    print("la imagen se ha guardado en: "+rutaEnNube);
 
     final rutaAFicheroEnNube = storageRef.child(rutaEnNube);
 
@@ -84,22 +82,14 @@ void onCameraClicked() async{
       await rutaAFicheroEnNube.putFile(_imagePreview,metadata);
 
     } on FirebaseException catch (e) {
-      print("error "+e.toString());
-      // ...
+      print("ERROR AL SUBIR IMAGEN: "+e.toString());
     }
-    imgUrl=await rutaAFicheroEnNube.getDownloadURL();
-  }
 
-  void subirElPost()
-  {
+    String imgUrl=await rutaAFicheroEnNube.getDownloadURL();
+
     FbPostId postNuevo=new FbPostId(post: tecPost.text, usuario: usuario.nombre, titulo: tecTitulo.text, sUrlImg: imgUrl, id: " ");
 
-    CollectionReference<FbPostId> postsRef = db.collection("PostUsuario")
-        .withConverter(
-      fromFirestore: FbPostId.fromFirestore,
-      toFirestore: (FbPostId post, _) => post.toFirestore(),
-    );
-    postsRef.add(postNuevo);
+    conexion.insertPostEnFBId(postNuevo);
   }
 
   @override
@@ -116,12 +106,10 @@ void onCameraClicked() async{
           Padding(padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             child: customTextField(contenido: "introduzca el posts", tecUsername: tecPost,oscuro: false,),
           ),
-          //Image.network(""),
+
           TextButton(onPressed: onGalleyClicked, child: Text("CargarImagen"),),
           TextButton(onPressed: onCameraClicked, child: Text("selecionar imagen camara"),),
-          //TextButton(onPressed: conseguirUsuario, child: Text("CargarUsuarios"),),
-          //TextButton(onPressed: subirPost, child: Text("Camara")),
-          TextButton(onPressed: subirElPost, child: Text("SubirPostCompleto")),
+          TextButton(onPressed: subirPost, child: Text("Camara")),
           TextButton(onPressed: () {
             Image.file(_imagePreview,width: 400,height: 400,);
             Row(
@@ -131,15 +119,8 @@ void onCameraClicked() async{
             ],
             );
           }, child: Text("")),
-
         ],
-
       ),
     );
-
-
-
-
-
   }
 }
