@@ -31,6 +31,15 @@ class FirebaseAdmin{
     return usuario;
   }
 
+  Future<void> updateUserData(String nombre, int edad, String imagen) async {
+
+    FbUsuario usuario = FbUsuario(nombre: nombre, edad: edad, shint: imagen);
+    String uidUsuario = FirebaseAuth.instance.currentUser!.uid;
+    await db.collection("Usuarios").doc(uidUsuario).set(usuario.toFirestore());
+
+
+
+  }
 
   Future<void> anadirUsuario(String nombre, int edad, String img) async {
 

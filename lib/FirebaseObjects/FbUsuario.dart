@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FbUsuario{
 
-  final String nombre;
-  final int edad;
-  final String shint;
+   String nombre;
+   int edad;
+   String shint;
 
   FbUsuario ({
     required this.nombre,
