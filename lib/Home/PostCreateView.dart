@@ -29,15 +29,19 @@ class _PostCreateViewState extends State<PostCreateView> {
   TextEditingController tecPost=TextEditingController();
   late FbUsuario usuario;
   DataHolder conexion= DataHolder();
+
+  String id=".";
+  String nombreUsuario = ".";
+
   ImagePicker _picker = ImagePicker();
   File _imagePreview=File("");
 
   String imgUrl="";
 
- @override
+  @override
   void initState() {
     super.initState();
-    //conseguirUsuario();
+    conseguirUsuario();
   }
 
   void onGalleyClicked() async{
@@ -46,12 +50,11 @@ class _PostCreateViewState extends State<PostCreateView> {
     if(image!=null){
       setState(() {
         _imagePreview=File(image.path);
-        print(_imagePreview.toString());
       });
     }
-}
+  }
 
-void onCameraClicked() async{
+  void onCameraClicked() async{
 
     XFile? image = await _picker.pickImage(source: ImageSource.camera);
     if(image!=null){
@@ -59,7 +62,8 @@ void onCameraClicked() async{
         _imagePreview=File(image.path);
       });
     }
- }
+  }
+
 
   void conseguirUsuario() async {
 
@@ -72,8 +76,9 @@ void onCameraClicked() async{
     final storageRef = FirebaseStorage.instance.ref();
 
     String rutaEnNube=
-        "posts/"+FirebaseAuth.instance.currentUser!.uid+"/imgs/"+DateTime.now().millisecondsSinceEpoch.toString()+".jpg";
-    print("la imagen se ha guardado en: "+rutaEnNube);
+        "posts/"+FirebaseAuth.instance.currentUser!.uid+"/imgs/"+
+            DateTime.now().millisecondsSinceEpoch.toString()+".jpg";
+    print("RUTA DONDE VA A GUARDARSE LA IMAGEN: "+rutaEnNube);
 
     final rutaAFicheroEnNube = storageRef.child(rutaEnNube);
 
@@ -84,12 +89,23 @@ void onCameraClicked() async{
     } on FirebaseException catch (e) {
       print("ERROR AL SUBIR IMAGEN: "+e.toString());
     }
+    imgUrl=await rutaAFicheroEnNube.getDownloadURL();
+  }
 
-    String imgUrl=await rutaAFicheroEnNube.getDownloadURL();
+  void subirElPost()
+  {
+    conseguirUsuario();
+    subirPost();
+    print(imgUrl);
 
     FbPostId postNuevo=new FbPostId(post: tecPost.text, usuario: usuario.nombre, titulo: tecTitulo.text, sUrlImg: imgUrl, id: " ");
 
-    conexion.insertPostEnFBId(postNuevo);
+    CollectionReference<FbPostId> postsRef = db.collection("PostUsuario")
+        .withConverter(
+      fromFirestore: FbPostId.fromFirestore,
+      toFirestore: (FbPostId post, _) => post.toFirestore(),
+    );
+    postsRef.add(postNuevo);
   }
 
   @override
@@ -101,24 +117,23 @@ void onCameraClicked() async{
       body: Column(
         children: [
           Padding(padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-            child:  customTextField(contenido: "introduzca el titulo del post", tecUsername: tecTitulo,oscuro: false,),
+            child:  customTextField(tecUsername: tecTitulo,oscuro: false,sHint: "Introduzca el titulo del post"),
           ),
           Padding(padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-            child: customTextField(contenido: "introduzca el posts", tecUsername: tecPost,oscuro: false,),
+            child: customTextField(tecUsername: tecPost,oscuro: false,sHint: "Introduzca el contenido del post",),
           ),
-
-          TextButton(onPressed: onGalleyClicked, child: Text("CargarImagen"),),
-          TextButton(onPressed: onCameraClicked, child: Text("selecionar imagen camara"),),
-          TextButton(onPressed: subirPost, child: Text("Camara")),
+          TextButton(onPressed: onGalleyClicked, child: Text("Cargar Imagen desde galeria"),),
+          TextButton(onPressed: onCameraClicked, child: Text("selecionar imagen desde camara"),),
+          TextButton(onPressed: subirElPost, child: Text("SubirPostCompleto")),
           TextButton(onPressed: () {
             Image.file(_imagePreview,width: 400,height: 400,);
             Row(
-            children: [
-            TextButton(onPressed: onGalleyClicked, child: Text("Galeria")),
-            TextButton(onPressed: onCameraClicked, child: Text("Camara")),
-            ],
+              children: [
+                TextButton(onPressed: onGalleyClicked, child: Text("Galeria")),
+                TextButton(onPressed: onCameraClicked, child: Text("Camara")),
+              ],
             );
-          }, child: Text("")),
+          }, child: Text(" ")),
         ],
       ),
     );

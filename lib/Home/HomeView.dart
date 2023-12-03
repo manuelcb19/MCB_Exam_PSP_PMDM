@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examenmcb/FirebaseObjects/FbUsuario.dart';
+import 'package:examenmcb/Home/Editarperfil.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -32,14 +33,10 @@ class _HomeViewState extends State<HomeView> {
   FirebaseFirestore db = FirebaseFirestore.instance;
   DataHolder dataHolder = DataHolder();
   late FbUsuario perfil;
-  int _selectedIndex = 0;
   bool bIsList = false;
   final Map<String,FbPostId> mapPosts = Map();
-
   final List<FbPostId> posts = [];
-  //final List<FbPostId> postsId = [];
   final List<FbUsuario> listaUsuarios = [];
-
 
   Map<String, dynamic> miDiccionario = {};
 
@@ -85,50 +82,25 @@ class _HomeViewState extends State<HomeView> {
     print("Listen failed: $error");
   }
 
-  void descargarPostsMej() async {
-
-    CollectionReference<FbPostId> postsRef = db.collection("PostUsuario")
-        .withConverter(
-      fromFirestore: FbPostId.fromFirestore,
-      toFirestore: (FbPostId post, _) => post.toFirestore(),);
-
-    QuerySnapshot<FbPostId> querySnapshot = await postsRef.get();
-    for (int i = 0; i < querySnapshot.docs.length; i++) {
-      setState(() {
-        posts.add(querySnapshot.docs[i].data());
-      });
-    }
-    print("la lista tiene este " + posts.length.toString());
-  }
-
   void uploadImageToFirebase(File imageFile) async {
     if (imageFile != null) {
-      // Obtiene la referencia de Firebase Storage
       Reference storageReference = FirebaseStorage.instance
           .ref()
           .child('user_profile_images/${DateTime.now()}.png');
 
-      // Sube la imagen
       UploadTask uploadTask = storageReference.putFile(imageFile);
 
-      // Monitorea el progreso de la carga
       uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) {
         print('Progreso: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100}%');
       });
 
-      // Espera a que se complete la carga
       await uploadTask.whenComplete(() {
         print('Carga completada');
       });
-
-      // Obtiene la URL de la imagen después de cargarla
       String downloadURL = await storageReference.getDownloadURL();
 
-      // Guarda esta URL en tu base de datos si es necesario.
     }
   }
-
-
 
   void conseguirUsuario() async {
 
@@ -138,7 +110,6 @@ class _HomeViewState extends State<HomeView> {
   void onItemListClicked(int index){
     DataHolder().selectedPost=posts[index];
 
-    //DataHolder().Usuario=perfil;
     Navigator.of(context).pushNamed("/usuarioview");
 
   }
@@ -168,15 +139,6 @@ class _HomeViewState extends State<HomeView> {
           break;
       }
     });
-
-    void onClickAceptar() {
-      setState(() {
-        miDiccionario = {
-          'Nombre': perfil.nombre,
-          'Edad': perfil.edad,
-        };
-      });
-    }
   }
 
   @override
@@ -195,7 +157,7 @@ class _HomeViewState extends State<HomeView> {
       drawer: CustomDrawer(onItemTap: fHomeViewDrawerOnTap,),
       floatingActionButton:FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushNamed("/postcreateview");
+          Navigator.of(context).pushNamed("/editarperfil");
         },
         child: Icon(Icons.add),
       ),
@@ -224,8 +186,12 @@ class _HomeViewState extends State<HomeView> {
         ModalRoute.withName('/loginview'),
       );
     }
-    else if(indice==1){
-      exit(0);
+    else if (indice==1){
+
+      Navigator.of(context).pushAndRemoveUntil (
+        MaterialPageRoute (builder: (BuildContext context) =>  Editarperfil()),
+        ModalRoute.withName('/editarperfil'),
+      );
     }
   }
 
@@ -236,16 +202,20 @@ class _HomeViewState extends State<HomeView> {
         dFuenteTamanyo: 20,
         iPosicion: index,
         imagen: posts[index].sUrlImg,
-        onItemListClickedFun:onItemListClicked);
+        onItemListClickedFun:onItemListClicked,
+        tituloPost:  posts[index].titulo,
+        usuario: posts[index].usuario,);
   }
 
 
   Widget? creadorDeItemMatriz(BuildContext context, int index) {
     return CustomGredCellView(
-      sText: recorrerDiccionario(miDiccionario) + " " + posts[index].post,
+      sText: posts[index].post,
       dFontSize: 20,
       imagen: posts[index].sUrlImg,
       iColorCode: 0,
+      usuario: posts[index].usuario,
+      tituloPost:  posts[index].titulo,
     );
   }
 

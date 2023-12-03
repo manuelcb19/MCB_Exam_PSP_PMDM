@@ -21,22 +21,22 @@ class CustomDrawer extends StatelessWidget{
             ),
             child: Text(
                 style: TextStyle(color: Colors.white),
-                'Header'
+                'Navegable'
             ),
           ),
           ListTile(
             leading: Image.asset('resources/imageninicial.png'),
             selectedColor: Colors.blue,
             selected: true,
-            title: const Text('Apartado 1'),
+            title: const Text('Cerrar Sesion'),
             onTap: () {
               onItemTap!(0);
 
             },
           ),
           ListTile(
-            leading: Icon(Icons.accessible_forward_rounded, color: Colors.red),
-            title: const Text('Apartado 2'),
+            leading: Image.asset('resources/imageninicial.png'),
+            title: const Text('Ir al perfil'),
             onTap: () {
               onItemTap!(1);
             },

@@ -1,5 +1,7 @@
  
 
+import 'package:examenmcb/Home/EditarPost.dart';
+import 'package:examenmcb/Home/Editarperfil.dart';
 import 'package:examenmcb/Home/HomeView.dart';
 import 'package:examenmcb/Home/PostCreateView.dart';
 import 'package:examenmcb/onBoarding/LoginView.dart';
@@ -26,6 +28,8 @@ Widget build(BuildContext context) {
         '/perfilview':(context) => PerfilView(),
         '/homeview':(context) => HomeView(),
         '/postcreateview':(context) => PostCreateView(),
+        '/editarpost':(context) => EditarPost(),
+        '/editarperfil':(context) => Editarperfil(),
       },
       initialRoute: '/loginview',
     );

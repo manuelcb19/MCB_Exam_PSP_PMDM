@@ -41,7 +41,7 @@ class CustomButton extends StatelessWidget {
             ),
             TextButton(
               onPressed: onBotonesClicked != null ? () => onBotonesClicked!(3) : null,
-              child: Text(texto), // Usamos la variable texto aquí
+              child: Text(texto),
             ),
           ],
         if (onPressed != null)

@@ -8,6 +8,8 @@ class CustomCellView extends StatelessWidget {
   final double dFuenteTamanyo;
   final int iPosicion;
   final String imagen;
+  final String usuario;
+  final String tituloPost;
   final Function(int indice) onItemListClickedFun;
 
   const CustomCellView({super.key,
@@ -17,83 +19,65 @@ class CustomCellView extends StatelessWidget {
     required this.dFuenteTamanyo,
     required this.iPosicion,
     required this.imagen,
-    required this.onItemListClickedFun});
+    required this.onItemListClickedFun,
+    required this.usuario,
+    required this.tituloPost});
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return InkWell(
-      child: Container(
-        margin: EdgeInsets.all(20),
-        height: 600,
-        width: 600,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            opacity: 0.3,
-            image: NetworkImage(imagen),
-            fit: BoxFit.contain,
-          ),
-        ),
-        child: Stack(
+      child: Card(
+        margin: EdgeInsets.all(8.0),
+        child: Column(
           children: [
-            Positioned(
-              top: 20,
-              left: 20,
+            Padding(
+              padding: EdgeInsets.all(8.0),
               child: Text(
-                "usuario",
-                style: TextStyle(fontSize: dFuenteTamanyo, color: Colors.black),
-              ),
-            ),
-            Positioned(
-              bottom: 20,
-              right: 20,
-              child: TextButton(
-                onPressed: null,
-                child: Text("+", style: TextStyle(fontSize: dFuenteTamanyo, color: Colors.white)),
-              ),
-            ),
-            Positioned(
-              bottom: -10,
-              left: 10,
-              right: 20,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(10),
+                usuario,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: dFuenteTamanyo,
+                  fontWeight: FontWeight.bold,
                 ),
-                padding: EdgeInsets.all(8),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        style: TextStyle(color: Colors.white),
-                        decoration: InputDecoration(
-                          hintText: 'Añadir un comentario...',
-                          hintStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    TextButton(
-                      onPressed: () {
-                        // Agrega tu lógica para manejar el envío del comentario
-                      },
-                      child: Text(
-                        'Enviar',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                tituloPost,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: dFuenteTamanyo,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                print("Clic en la imagen");
+                Navigator.of(context).pushNamed("/editarperfil");
+              },
+              child: Image.network(
+                imagen,
+                height: 600.0,
+                width: double.infinity,
+                fit: BoxFit.contain,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                tituloPost,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: dFuenteTamanyo,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ],
         ),
       ),
-      onTap: () {
-        onItemListClickedFun(iPosicion);
-        //print("tapped on container " + iPosicion.toString());
-      },
     );
   }
 }
