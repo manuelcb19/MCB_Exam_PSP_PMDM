@@ -7,6 +7,7 @@ import 'package:examenmcb/Home/Editarperfil.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../CustomViews/CustomButton.dart';
 import '../CustomViews/CustomCellView.dart';
@@ -49,6 +50,14 @@ class _HomeViewState extends State<HomeView> {
     super.initState();
     conseguirUsuario();
     descargarPosts();
+    loadGeoLocator();
+  }
+
+  void loadGeoLocator() async{
+    Position pos=await DataHolder().geolocAdmin.determinePosition();
+    print("------------>>>> "+pos.toString());
+    DataHolder().geolocAdmin.registrarCambiosLoc();
+
   }
 
   void descargarPosts() async{
@@ -157,7 +166,7 @@ class _HomeViewState extends State<HomeView> {
       drawer: CustomDrawer(onItemTap: fHomeViewDrawerOnTap,),
       floatingActionButton:FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushNamed("/editarperfil");
+          Navigator.of(context).pushNamed("/postcreateview");
         },
         child: Icon(Icons.add),
       ),
