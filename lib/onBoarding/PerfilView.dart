@@ -59,7 +59,7 @@ class PerfilView extends StatelessWidget {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                           CustomButton(texto: "aceptar", funcion: onClickAceptar,)
+                           CustomButton(texto: "aceptar", onPressed: onClickAceptar,)
 
                     ]
                 )

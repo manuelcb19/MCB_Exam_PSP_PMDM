@@ -105,8 +105,8 @@ class LoginView extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CustomButton(funcion: onClickAceptar, texto: "Login"),
-                    CustomButton(funcion: onClickRegistrar, texto: "Registrar"),
+                    CustomButton(onPressed: onClickAceptar, texto: 'aceptar',),
+                    CustomButton(onPressed: onClickRegistrar, texto: 'registrar',),
                   ],
                 ),
 

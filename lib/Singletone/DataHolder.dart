@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../FirebaseObjects/FbPostId.dart';
 import 'FirebaseAdmin.dart';
@@ -13,6 +14,7 @@ class DataHolder {
   String sNombre="Examen Dataholder";
   FirebaseFirestore db = FirebaseFirestore.instance;
   FirebaseAdmin fbadmin=FirebaseAdmin();
+  late FbPostId selectedPost;
 
   DataHolder._internal() {
   }
@@ -34,6 +36,19 @@ class DataHolder {
     );
 
     postsRef.add(postNuevo);
+  }
+
+  void saveSelectedPostInCache() async{
+    if(selectedPost!=null){
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('postsusuario_surlimg', selectedPost!.sUrlImg);
+      prefs.setString('postsusuario_usuario', selectedPost!.usuario);
+      prefs.setString('postsusuario_titulo', selectedPost!.titulo);
+      prefs.setString('postsusuario_post', selectedPost!.post);
+      prefs.setString('postsusuario_IdUsuario', selectedPost!.id);
+
+    }
+
   }
 
 
