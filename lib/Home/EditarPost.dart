@@ -12,10 +12,7 @@ import '../FirebaseObjects/FbPostId.dart';
 import '../Singletone/DataHolder.dart';
 
 class EditarPost extends StatefulWidget {
-
-
-
-  late String? postId;
+  String? postId;
 
   EditarPost({this.postId});
 
@@ -34,12 +31,13 @@ class _EditarPostState extends State<EditarPost> {
   String postContenido = " ";
   String imagenUrl = " ";
   DataHolder conexion = DataHolder();
-  bool _isDisposed = false; // Nuevo booleano para rastrear si el widget ha sido eliminado
+  bool _isDisposed = false;
 
   @override
   void dispose() {
     _isDisposed = true;
     super.dispose();
+    print(widget.postId.toString()); // Use widget.postId here
   }
 
   Future<void> updateImage() async {
@@ -64,6 +62,8 @@ class _EditarPostState extends State<EditarPost> {
   }
 
   Future<void> updateImageCamera() async {
+
+    print("el usuario es:" + widget.postId.toString());
     if (_isDisposed) return; // Verificar si el widget ha sido eliminado
 
     XFile? image = await _picker.pickImage(source: ImageSource.camera);
@@ -162,7 +162,7 @@ class _EditarPostState extends State<EditarPost> {
                           onPressed: () {
                             // Cerrar el cuadro de diálogo y actualizar los datos en Firestore
                             Navigator.of(context).pop();
-                            conexion.fbadmin.updatePostData(titulo, postContenido, imagenUrl, usuario, userId);
+                            conexion.fbadmin.updatePostData(titulo, postContenido, imagenUrl, usuario, widget.postId.toString());
                             setState(() {});
                           },
                           child: Text('Guardar Cambios'),
