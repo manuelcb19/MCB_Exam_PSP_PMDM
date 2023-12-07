@@ -172,8 +172,7 @@ class _HomeViewState extends State<HomeView> {
       drawer: CustomDrawer(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
       floatingActionButton:FloatingActionButton(
         onPressed: () {
-          DataHolder().httpAdmin.pedirTemperaturasEn(40.45535, -3.46973);
-          //Navigator.of(context).pushNamed("/postcreateview");
+          Navigator.of(context).pushNamed("/postcreateview");
         },
         child: Icon(Icons.add),
       ),
@@ -213,7 +212,7 @@ class _HomeViewState extends State<HomeView> {
 
         double temperatura = await DataHolder().httpAdmin.pedirTemperaturasEn(currentPosition.latitude, currentPosition.longitude);
 
-        CustomDialog.show(context, 'La temperatura actual en tu posicion es: $temperatura');
+        CustomDialog.show(context, 'La temperatura en las oficinas de google es: $temperatura');
       } catch (e) {
 
         CustomDialog.show(context, 'Error al obtener la temperatura');
