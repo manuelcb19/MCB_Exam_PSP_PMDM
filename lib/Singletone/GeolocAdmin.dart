@@ -1,16 +1,13 @@
 import 'dart:async';
-
 import 'package:geolocator/geolocator.dart';
 
-class GeolocAdmin{
-
+class GeolocAdmin {
   Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-
       return Future.error('Location services are disabled.');
     }
 
@@ -18,13 +15,11 @@ class GeolocAdmin{
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
@@ -36,9 +31,15 @@ class GeolocAdmin{
       accuracy: LocationAccuracy.high,
       distanceFilter: 0,
     );
-    Position position = await Geolocator.getPositionStream(locationSettings: locationSettings).first;
-    print(position == null ? 'Unknown' : '${position.latitude.toString()}, ${position.longitude.toString()}');
-    return position;
+    try {
+      Position position = await Geolocator.getCurrentPosition();
+      print(position == null
+          ? 'Unknown'
+          : '${position.latitude.toString()}, ${position.longitude.toString()}');
+      return position;
+    } catch (e) {
+      print('Error al obtener la posición: $e');
+      throw Exception('Error al obtener la posición');
+    }
   }
-
 }

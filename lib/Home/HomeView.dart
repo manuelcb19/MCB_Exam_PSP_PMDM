@@ -212,7 +212,7 @@ class _HomeViewState extends State<HomeView> {
 
         double temperatura = await DataHolder().httpAdmin.pedirTemperaturasEn(currentPosition.latitude, currentPosition.longitude);
 
-        CustomDialog.show(context, 'La temperatura en las oficinas de google es: $temperatura');
+        CustomDialog.show(context, 'La temperatura actual es de: $temperatura');
       } catch (e) {
 
         CustomDialog.show(context, 'Error al obtener la temperatura');
