@@ -12,7 +12,7 @@ class DataHolder {
 
   static final DataHolder _dataHolder = DataHolder._internal();
 
-  String sNombre="Examen";
+  String sNombre="ExamenManuelCarrizosa";
   FirebaseFirestore db = FirebaseFirestore.instance;
   FirebaseAdmin fbadmin=FirebaseAdmin();
   late FbPostId selectedPost;

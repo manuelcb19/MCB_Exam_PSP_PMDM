@@ -44,104 +44,119 @@ class _PostCreateViewState extends State<PostCreateView> {
     conseguirUsuario();
   }
 
-  void onGalleyClicked() async{
-
+  void onGalleyClicked() async {
     XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if(image!=null){
+    if (image != null) {
       setState(() {
-        _imagePreview=File(image.path);
+        _imagePreview = File(image.path);
       });
     }
   }
 
-  void onCameraClicked() async{
-
+  void onCameraClicked() async {
     XFile? image = await _picker.pickImage(source: ImageSource.camera);
-    if(image!=null){
+    if (image != null) {
       setState(() {
-        _imagePreview=File(image.path);
+        _imagePreview = File(image.path);
       });
     }
   }
-
 
   void conseguirUsuario() async {
-
     usuario = await conexion.fbadmin.conseguirUsuario();
-
   }
 
-  void subirPost() async {
-    //-----------------------INICIO DE SUBIR IMAGEN--------
-    // Create a storage reference from our app
+  Future<String> setearUrlImagen() async {
     final storageRef = FirebaseStorage.instance.ref();
 
-    // Create a reference to "mountains.jpg"
     String rutaEnNube =
         "posts/" + FirebaseAuth.instance.currentUser!.uid + "/imgs/" +
             DateTime.now().millisecondsSinceEpoch.toString() + ".jpg";
     print("RUTA DONDE VA A GUARDARSE LA IMAGEN: " + rutaEnNube);
 
     final rutaAFicheroEnNube = storageRef.child(rutaEnNube);
-    // Create the file metadata
+
     final metadata = SettableMetadata(contentType: "image/jpeg");
     try {
       await rutaAFicheroEnNube.putFile(_imagePreview, metadata);
 
       print("SE HA SUBIDO LA IMAGEN");
 
+      // Obtén la URL de la imagen después de subirla
+      String url = await rutaAFicheroEnNube.getDownloadURL();
+      print("URL de la imagen: $url");
+      return url;
     } on FirebaseException catch (e) {
       print("ERROR AL SUBIR IMAGEN: " + e.toString());
       print("STACK TRACE: " + e.stackTrace.toString());
-      // ...
+      return "";
     }
-
-    //-----------------------POST DE SUBIR POST--------
   }
 
-  void subirElPost()
-  {
+  void subirElPost() async {
     conseguirUsuario();
-    subirPost();
-    print("la ruta es-----------------" + imgUrl);
-    print(imgUrl);
 
-    FbPostId postNuevo=new FbPostId(post: tecPost.text, usuario: usuario.nombre, titulo: tecTitulo.text, sUrlImg: imgUrl, id: " ");
+    // Setea la URL de la imagen
+    imgUrl = await setearUrlImagen();
 
-    CollectionReference<FbPostId> postsRef = db.collection("PostUsuario")
+    FbPostId postNuevo = FbPostId(
+      post: tecPost.text,
+      usuario: usuario.nombre,
+      titulo: tecTitulo.text,
+      sUrlImg: imgUrl,
+      id: "", // se deja en blanco porque se va a introducir luego
+    );
+
+    CollectionReference<FbPostId> postsRef = db
+        .collection("PostUsuario")
         .withConverter(
       fromFirestore: FbPostId.fromFirestore,
       toFirestore: (FbPostId post, _) => post.toFirestore(),
     );
-    postsRef.add(postNuevo);
+
+    DocumentReference<FbPostId> postDocRef = await postsRef.add(postNuevo);
+
+    String postId = postDocRef.id;
+    print("El ID del nuevo post es: $postId");
+
+    postNuevo = postNuevo.copyWith(id: postId);
+    await postDocRef.update(postNuevo.toFirestore());
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
     return Scaffold(
       appBar: AppBar(title: Text(DataHolder().sNombre)),
       body: Column(
         children: [
-          Padding(padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-            child:  customTextField(tecUsername: tecTitulo,oscuro: false,sHint: "Introduzca el titulo del post"),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: customTextField(
+              tecUsername: tecTitulo,
+              oscuro: false,
+              sHint: "Introduzca el titulo del post",
+            ),
           ),
-          Padding(padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-            child: customTextField(tecUsername: tecPost,oscuro: false,sHint: "Introduzca el contenido del post",),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: customTextField(
+              tecUsername: tecPost,
+              oscuro: false,
+              sHint: "Introduzca el contenido del post",
+            ),
           ),
-          TextButton(onPressed: onGalleyClicked, child: Text("Cargar Imagen desde galeria"),),
-          TextButton(onPressed: onCameraClicked, child: Text("selecionar imagen desde camara"),),
-          TextButton(onPressed: subirPost, child: Text("SubirPostCompleto")),
-          TextButton(onPressed: () {
-            Image.file(_imagePreview,width: 400,height: 400,);
-            Row(
-              children: [
-                TextButton(onPressed: onGalleyClicked, child: Text("Galeria")),
-                TextButton(onPressed: onCameraClicked, child: Text("Camara")),
-              ],
-            );
-          }, child: Text(" ")),
+          TextButton(
+            onPressed: onGalleyClicked,
+            child: Text("Cargar Imagen desde galeria"),
+          ),
+          TextButton(
+            onPressed: onCameraClicked,
+            child: Text("Seleccionar imagen desde cámara"),
+          ),
+          TextButton(
+            onPressed: subirElPost,
+            child: Text("Subir Post Completo"),
+          ),
         ],
       ),
     );

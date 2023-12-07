@@ -12,14 +12,6 @@ class CustomButton extends StatelessWidget {
     required this.texto,
   }) : super(key: key);
 
-  void fNombre1() {
-    print("DAM1 --->>>" + texto);
-  }
-
-  void fNombre2() {
-    print("DAM2 --->>>" + texto);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -34,14 +26,6 @@ class CustomButton extends StatelessWidget {
             TextButton(
               onPressed: onBotonesClicked != null ? () => onBotonesClicked!(1) : null,
               child: Icon(Icons.grid_view, color: Colors.pink),
-            ),
-            IconButton(
-              onPressed: onBotonesClicked != null ? () => onBotonesClicked!(2) : null,
-              icon: Image.asset("resources/imageninicial.png"),
-            ),
-            TextButton(
-              onPressed: onBotonesClicked != null ? () => onBotonesClicked!(3) : null,
-              child: Text(texto),
             ),
           ],
         if (onPressed != null)

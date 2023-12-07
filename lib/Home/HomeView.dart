@@ -213,7 +213,7 @@ class _HomeViewState extends State<HomeView> {
         imagen: posts[index].sUrlImg,
         onItemListClickedFun:onItemListClicked,
         tituloPost:  posts[index].titulo,
-        usuario: posts[index].usuario,);
+        usuario: posts[index].usuario, idPost: posts[index].id,);
   }
 
 
@@ -224,7 +224,7 @@ class _HomeViewState extends State<HomeView> {
       imagen: posts[index].sUrlImg,
       iColorCode: 0,
       usuario: posts[index].usuario,
-      tituloPost:  posts[index].titulo,
+      tituloPost:  posts[index].titulo, idPost: posts[index].id,
     );
   }
 

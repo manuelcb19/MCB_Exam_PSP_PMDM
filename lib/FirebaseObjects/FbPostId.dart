@@ -8,6 +8,7 @@ class FbPostId{
   final String titulo;
   final String sUrlImg;
   final String id;
+  //final String idPost;
 
   FbPostId ({
     required this.post,
@@ -26,13 +27,31 @@ class FbPostId{
     final data = snapshot.data();
     return FbPostId(
         sUrlImg: data?['sUrlImg'] != null ? data!['sUrlImg'] : "",
-        usuario: data?['Usuario'],
+         usuario: data?['Usuario'],
         titulo: data?['Titulo'],
         post: data?['Post'],
         id: data?['IdUsuario'],
 
     );
   }
+  FbPostId copyWith({
+    String? id,
+    String? post,
+    String? usuario,
+    String? titulo,
+    String? sUrlImg,
+    // Agrega otros campos si es necesario
+  }) {
+    return FbPostId(
+      id: id ?? this.id,
+      post: post ?? this.post,
+      usuario: usuario ?? this.usuario,
+      titulo: titulo ?? this.titulo,
+      sUrlImg: sUrlImg ?? this.sUrlImg,
+      // Agrega otros campos si es necesario
+    );
+  }
+
 
   Map<String, dynamic> toFirestore() {
     return {

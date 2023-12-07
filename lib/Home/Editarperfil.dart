@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 
 
 class Editarperfil extends StatefulWidget {
+
+
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -16,39 +19,19 @@ class _HomeScreenState extends State<Editarperfil> {
   String userId = " ";
   String nombre = " ";
   int edad = 0;
-  String otroDato = " ";
+  String imagen = " ";
   DataHolder conexion = DataHolder();
 
   @override
   void initState() {
     super.initState();
-    _getUserData();
   }
 
-  Future<void> _getUserData() async {
 
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    print(uid);
-
-    DocumentReference<FbUsuario> enlace = db.collection("Usuarios").doc(
-        uid).withConverter(fromFirestore: FbUsuario.fromFirestore,
-      toFirestore: (FbUsuario usuario, _) => usuario.toFirestore(),);
-
-    FbUsuario usuario;
-
-    DocumentSnapshot<FbUsuario> docSnap = await enlace.get();
-    setState(() {
-      usuario = docSnap.data()!;
-      nombre = usuario.nombre;
-      edad = usuario.edad;
-      otroDato = usuario.shint;
-    });
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Perfil de Usuario'),
+      appBar: AppBar( title: Text((DataHolder().sNombre)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -57,7 +40,7 @@ class _HomeScreenState extends State<Editarperfil> {
           children: [
             Text("nombre: "+nombre),
             Text("edad:"+ edad.toString()),
-            Text("sHint"+ otroDato),
+            Text("sHint"+ imagen),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
@@ -83,7 +66,7 @@ class _HomeScreenState extends State<Editarperfil> {
                           ),
                           TextField(
                             onChanged: (value) {
-                              otroDato = value;
+                              imagen = value;
                             },
                             decoration: InputDecoration(labelText: 'Nuevo Otro Dato'),
                           ),
@@ -93,7 +76,7 @@ class _HomeScreenState extends State<Editarperfil> {
                         ElevatedButton(
                           onPressed: () {
                             // Cerrar el cuadro de diálogo y actualizar los datos en Firestore
-                            Navigator.of(context).pop();conexion.fbadmin.updateUserData(nombre,edad,otroDato);setState(() {});
+                            Navigator.of(context).pop();conexion.fbadmin.updateUserData(nombre,edad,imagen);setState(() {});
                           },
                           child: Text('Guardar Cambios'),
                         ),

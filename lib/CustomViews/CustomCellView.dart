@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../Home/EditarPost.dart';
+
 class CustomCellView extends StatelessWidget {
 
   final String sTexto;
@@ -11,8 +13,10 @@ class CustomCellView extends StatelessWidget {
   final String usuario;
   final String tituloPost;
   final Function(int indice) onItemListClickedFun;
+  final idPost;
 
   const CustomCellView({super.key,
+
 
     required this.sTexto,
     required this.iCodigoColor,
@@ -21,6 +25,7 @@ class CustomCellView extends StatelessWidget {
     required this.imagen,
     required this.onItemListClickedFun,
     required this.usuario,
+    required this.idPost,
     required this.tituloPost});
 
   @override
@@ -32,30 +37,27 @@ class CustomCellView extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text(
-                usuario,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: dFuenteTamanyo,
-                  fontWeight: FontWeight.bold,
+              child: Text(usuario, textAlign: TextAlign.center,
+                style: TextStyle(fontSize: dFuenteTamanyo, fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text(
-                tituloPost,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: dFuenteTamanyo,
-                  fontWeight: FontWeight.bold,
+              child: Text(tituloPost, textAlign: TextAlign.center,
+                style: TextStyle(fontSize: dFuenteTamanyo, fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             InkWell(
               onTap: () {
                 print("Clic en la imagen");
-                Navigator.of(context).pushNamed("/editarperfil");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditarPost(postId: idPost),
+                  ),
+                );
               },
               child: Image.network(
                 imagen,
@@ -66,12 +68,8 @@ class CustomCellView extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text(
-                tituloPost,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: dFuenteTamanyo,
-                  fontWeight: FontWeight.bold,
+              child: Text(tituloPost+"         ggg", textAlign: TextAlign.center,
+                style: TextStyle(fontSize: dFuenteTamanyo, fontWeight: FontWeight.bold,
                 ),
               ),
             ),
