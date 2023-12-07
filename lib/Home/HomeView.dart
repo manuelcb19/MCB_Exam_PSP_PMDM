@@ -166,7 +166,7 @@ class _HomeViewState extends State<HomeView> {
       drawer: CustomDrawer(onItemTap: fHomeViewDrawerOnTap,),
       floatingActionButton:FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushNamed("/postcreateview");
+          Navigator.of(context).pushNamed("/mapaview");
         },
         child: Icon(Icons.add),
       ),
@@ -195,13 +195,13 @@ class _HomeViewState extends State<HomeView> {
         ModalRoute.withName('/loginview'),
       );
     }
-    else if (indice==1){
-
-      Navigator.of(context).pushAndRemoveUntil (
-        MaterialPageRoute (builder: (BuildContext context) =>  Editarperfil()),
-        ModalRoute.withName('/editarperfil'),
+    else if (indice == 1) {
+      Navigator.of(context).pushNamed(
+        '/editarperfil',
+        arguments: {/* Puedes pasar argumentos si es necesario */},
       );
     }
+
   }
 
   Widget? creadorDeItemLista(BuildContext context, int index) {

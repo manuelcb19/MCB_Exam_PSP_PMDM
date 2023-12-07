@@ -82,7 +82,9 @@ class FirebaseAdmin {
 
   Future<void> updatePostData(String titulo, String postContenido, String imagenUrl, String nombre, String postId) async {
 
-    DocumentReference<Map<String, dynamic>> postRef = db.collection("PostUsuario").doc("rbDdzlHWFmabfHMs61nt");
+
+    print("ffffffffffffffffffffffffffffffffffff" + postId);
+    DocumentReference<Map<String, dynamic>> postRef = db.collection("PostUsuario").doc(postId);
     // Obtener el documento actual
     DocumentSnapshot<Map<String, dynamic>> postSnapshot = await postRef.get();
 
@@ -93,7 +95,7 @@ class FirebaseAdmin {
         'Usuario': nombre,
         'Titulo': titulo,
         'Post': postContenido,
-        'IdUsuario' : FirebaseAuth.instance.currentUser!.uid,
+        'Idpost' : postId,
         // Agrega aquí otros campos si los tienes
       };
 
@@ -101,6 +103,7 @@ class FirebaseAdmin {
       await postRef.update(postData);
     } else {
       print("No se encontró el documento con el ID proporcionado.");
+      print(postId.toString());
       // Manejar el caso en el que no se encuentra el documento, como mostrar un mensaje al usuario o realizar otra acción.
     }
   }

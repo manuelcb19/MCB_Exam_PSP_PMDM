@@ -13,7 +13,7 @@ class CustomCellView extends StatelessWidget {
   final String usuario;
   final String tituloPost;
   final Function(int indice) onItemListClickedFun;
-  final idPost;
+  final String idPost;
 
   const CustomCellView({super.key,
 

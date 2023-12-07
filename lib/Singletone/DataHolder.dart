@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../FirebaseObjects/FbPostId.dart';
+import '../FirebaseObjects/FbUsuario.dart';
 import 'FirebaseAdmin.dart';
 import 'GeolocAdmin.dart';
 
@@ -17,6 +18,7 @@ class DataHolder {
   FirebaseAdmin fbadmin=FirebaseAdmin();
   late FbPostId selectedPost;
   GeolocAdmin geolocAdmin = GeolocAdmin();
+  FbUsuario? usuario;
 
   DataHolder._internal() {
   }
@@ -28,6 +30,21 @@ class DataHolder {
 
   factory DataHolder(){
     return _dataHolder;
+  }
+
+  Future<FbUsuario?> loadFbUsuario() async{
+    String uid=FirebaseAuth.instance.currentUser!.uid;
+    print("UID DE DESCARGA loadFbUsuario------------->>>> ${uid}");
+    DocumentReference<FbUsuario> ref=db.collection("Usuarios")
+        .doc(uid)
+        .withConverter(fromFirestore: FbUsuario.fromFirestore,
+      toFirestore: (FbUsuario usuario, _) => usuario.toFirestore(),);
+
+
+    DocumentSnapshot<FbUsuario> docSnap=await ref.get();
+    print("docSnap DE DESCARGA loadFbUsuario------------->>>> ${docSnap.data()}");
+    usuario=docSnap.data();
+    return usuario;
   }
 
   void insertPostEnFBId(FbPostId postNuevo){
