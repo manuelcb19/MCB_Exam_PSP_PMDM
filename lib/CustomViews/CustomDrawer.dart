@@ -55,6 +55,26 @@ class CustomDrawer extends StatelessWidget {
               onItemTap!(0);
             },
           ),
+          ListTile(
+            leading: Image.asset(
+                'resources/imagenInicial.png', width: 50, height: 50),
+            // Ajusta width y height según tus necesidades
+            title: const Text('Consultar Temperatura'),
+            onTap: () {
+              onItemTap!(2);
+            },
+
+          ),
+          ListTile(
+            leading: Image.asset(
+                'resources/imagenInicial.png', width: 50, height: 50),
+            // Ajusta width y height según tus necesidades
+            title: const Text('Consultar Mapa'),
+            onTap: () {
+              onItemTap!(3);
+            },
+
+          ),
         ],
       ),
     );

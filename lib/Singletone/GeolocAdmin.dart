@@ -31,15 +31,14 @@ class GeolocAdmin{
     return await Geolocator.getCurrentPosition();
   }
 
-  void registrarCambiosLoc(){
+  Future<Position> registrarCambiosLoc() async {
     final LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.high,
       distanceFilter: 0,
     );
-    StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
-            (Position? position) {
-          print(position == null ? 'Unknown' : '${position.latitude.toString()}, ${position.longitude.toString()}');
-        });
+    Position position = await Geolocator.getPositionStream(locationSettings: locationSettings).first;
+    print(position == null ? 'Unknown' : '${position.latitude.toString()}, ${position.longitude.toString()}');
+    return position;
   }
 
 }

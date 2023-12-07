@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:examenmcb/CustomViews/CustomDialog.dart';
 import 'package:examenmcb/FirebaseObjects/FbUsuario.dart';
 import 'package:examenmcb/Home/Editarperfil.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -171,7 +172,8 @@ class _HomeViewState extends State<HomeView> {
       drawer: CustomDrawer(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
       floatingActionButton:FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushNamed("/postcreateview");
+          DataHolder().httpAdmin.pedirTemperaturasEn(40.45535, -3.46973);
+          //Navigator.of(context).pushNamed("/postcreateview");
         },
         child: Icon(Icons.add),
       ),
@@ -191,22 +193,38 @@ class _HomeViewState extends State<HomeView> {
     return valores;
   }
 
-  void fHomeViewDrawerOnTap(int indice){
-    print("---->>>> "+indice.toString());
-    if(indice==0){
+  void fHomeViewDrawerOnTap(int indice) async {
+    print("---->>>> " + indice.toString());
+
+    if (indice == 0) {
       FirebaseAuth.instance.signOut();
-      Navigator.of(context).pushAndRemoveUntil (
-        MaterialPageRoute (builder: (BuildContext context) =>  LoginView()),
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (BuildContext context) => LoginView()),
         ModalRoute.withName('/loginview'),
       );
-    }
-    else if (indice == 1) {
+    } else if (indice == 1) {
       Navigator.of(context).pushNamed(
         '/editarperfil',
         arguments: {/* Puedes pasar argumentos si es necesario */},
       );
-    }
+    } else if (indice == 2) {
+      try {
+        Position currentPosition = await DataHolder().geolocAdmin.registrarCambiosLoc();
 
+        double temperatura = await DataHolder().httpAdmin.pedirTemperaturasEn(currentPosition.latitude, currentPosition.longitude);
+
+        CustomDialog.show(context, 'La temperatura actual en tu posicion es: $temperatura');
+      } catch (e) {
+
+        CustomDialog.show(context, 'Error al obtener la temperatura');
+      }
+    }
+    else
+      {
+
+        Navigator.of(context).pushNamed('/mapaview');
+
+      }
   }
 
   Widget? creadorDeItemLista(BuildContext context, int index) {

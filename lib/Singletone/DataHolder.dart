@@ -7,6 +7,7 @@ import '../FirebaseObjects/FbPostId.dart';
 import '../FirebaseObjects/FbUsuario.dart';
 import 'FirebaseAdmin.dart';
 import 'GeolocAdmin.dart';
+import 'HttpAdmin.dart';
 import 'PlatformAdmin.dart';
 
 
@@ -20,6 +21,7 @@ class DataHolder {
   late FbPostId selectedPost;
   GeolocAdmin geolocAdmin = GeolocAdmin();
   FbUsuario? usuario;
+  HttpAdmin httpAdmin=HttpAdmin();
   late PlatformAdmin platformAdmin;
 
   DataHolder._internal() {
