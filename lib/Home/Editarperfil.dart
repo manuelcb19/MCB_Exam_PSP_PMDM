@@ -37,8 +37,7 @@ class _HomeScreenState extends State<Editarperfil> {
     print(usuario.shint.toString());
     print(usuario.nombre.toString());
     print(usuario.edad.toString());
-    setState(() {
-    });
+    setState(() {});
   }
 
   Future<void> updateImage() async {
@@ -65,7 +64,10 @@ class _HomeScreenState extends State<Editarperfil> {
 
     String rutaEnNube =
         "usuarios/" + FirebaseAuth.instance.currentUser!.uid + "/imgs/" +
-            DateTime.now().millisecondsSinceEpoch.toString() + ".jpg";
+            DateTime
+                .now()
+                .millisecondsSinceEpoch
+                .toString() + ".jpg";
     print("RUTA DONDE VA A GUARDARSE LA IMAGEN: " + rutaEnNube);
 
     final rutaAFicheroEnNube = storageRef.child(rutaEnNube);
@@ -91,21 +93,22 @@ class _HomeScreenState extends State<Editarperfil> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text((DataHolder().sNombre)),
+        title: Text(DataHolder().sNombre),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            InkWell(
-              child: Image.network(
-                imagen,
-                height: 600.0,
-                width: double.infinity,
-                fit: BoxFit.contain,
+            if (imagen != " ")
+              InkWell(
+                child: Image.network(
+                  imagen,
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.contain,
+                ),
               ),
-            ),
             SizedBox(height: 20),
             Text("Nombre: " + nombre, style: TextStyle(fontSize: 20)),
             Text("Edad: " + edad.toString(), style: TextStyle(fontSize: 18)),
@@ -123,19 +126,22 @@ class _HomeScreenState extends State<Editarperfil> {
                             onChanged: (value) {
                               nombre = value;
                             },
-                            decoration: InputDecoration(labelText: 'Nuevo Nombre'),
+                            decoration: InputDecoration(
+                                labelText: 'Nuevo Nombre'),
                           ),
                           TextField(
                             onChanged: (value) {
                               edad = int.tryParse(value) ?? 0;
                             },
-                            decoration: InputDecoration(labelText: 'Nueva Edad'),
+                            decoration: InputDecoration(
+                                labelText: 'Nueva Edad'),
                           ),
                           TextField(
                             onChanged: (value) {
                               imagen = value;
                             },
-                            decoration: InputDecoration(labelText: 'Nuevo Otro Dato'),
+                            decoration: InputDecoration(
+                                labelText: 'Nuevo Otro Dato'),
                           ),
                           ElevatedButton(
                             onPressed: () async {
@@ -161,7 +167,8 @@ class _HomeScreenState extends State<Editarperfil> {
                             if (_imagePreview.existsSync()) {
                               imagen = await setearUrlImagen();
                             }
-                            conexion.fbadmin.updateUserData(nombre, edad, imagen);
+                            conexion.fbadmin.updateUserData(
+                                nombre, edad, imagen);
                             setState(() {});
                           },
                           child: Text('Guardar Cambios'),

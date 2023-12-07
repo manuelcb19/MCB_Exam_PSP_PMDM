@@ -13,8 +13,10 @@ import '../Singletone/DataHolder.dart';
 
 class EditarPost extends StatefulWidget {
   String? postId;
+  String? usuario;
+  String? imagen;
 
-  EditarPost({this.postId});
+  EditarPost({this.postId, this.usuario, this.imagen});
 
   @override
   _EditarPostState createState() => _EditarPostState();
@@ -60,6 +62,7 @@ class _EditarPostState extends State<EditarPost> {
       }
     }
   }
+
 
   Future<void> updateImageCamera() async {
 
@@ -115,7 +118,7 @@ class _EditarPostState extends State<EditarPost> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text((DataHolder().sNombre)),
+        title: Text(DataHolder().sNombre),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -124,59 +127,77 @@ class _EditarPostState extends State<EditarPost> {
           children: [
             Text("Título: " + titulo),
             Text("Contenido: " + postContenido),
-            Text("Imagen URL: " + imagenUrl),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Mostrar un cuadro de diálogo para que el usuario ingrese nuevos datos
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Modificar Datos del Post'),
-                      content: Column(
-                        children: [
-                          TextField(
-                            onChanged: (value) {
-                              titulo = value;
-                            },
-                            decoration: InputDecoration(labelText: 'Nuevo Título'),
+            if (imagenUrl != " ")
+              Image.network(
+                imagenUrl,
+                width: double.infinity,
+                height: 200,
+                fit: BoxFit.contain,
+              ),
+            SizedBox(height: 20),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Mostrar un cuadro de diálogo para que el usuario ingrese nuevos datos
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Modificar Datos del Post'),
+                          content: Column(
+                            children: [
+                              TextField(
+                                onChanged: (value) {
+                                  titulo = value;
+                                },
+                                decoration: InputDecoration(labelText: 'Nuevo Título'),
+                              ),
+                              TextField(
+                                onChanged: (value) {
+                                  postContenido = value;
+                                },
+                                decoration: InputDecoration(labelText: 'Nuevo Contenido'),
+                              ),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  // Permite al usuario seleccionar una imagen desde la galería
+                                  await updateImageCamera();
+                                },
+                                child: Text('Seleccionar Imagen desde camera'),
+                              ),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  await updateImage();
+                                },
+                                child: Text('Foto desde galeria'),
+                              ),
+                            ],
                           ),
-                          TextField(
-                            onChanged: (value) {
-                              postContenido = value;
-                            },
-                            decoration: InputDecoration(labelText: 'Nuevo Contenido'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              // Permite al usuario seleccionar una imagen desde la galería
-                              await updateImageCamera();
-                            },
-                            child: Text('Seleccionar Imagen desde Galería'),
-                          ),
-                        ],
-                      ),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () {
-                            // Cerrar el cuadro de diálogo y actualizar los datos en Firestore
-                            Navigator.of(context).pop();
-                            conexion.fbadmin.updatePostData(titulo, postContenido, imagenUrl, usuario, widget.postId.toString());
-                            setState(() {});
-                          },
-                          child: Text('Guardar Cambios'),
-                        ),
-                      ],
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () {
+                                // Cerrar el cuadro de diálogo y actualizar los datos en Firestore
+                                Navigator.of(context).pop();
+                                conexion.fbadmin.updatePostData(titulo, postContenido, imagenUrl, widget.usuario.toString(), widget.postId.toString());
+                                print("wwwwwwwwwwwwwwwwwwww" + imagenUrl);
+                                setState(() {});
+                              },
+                              child: Text('Guardar Cambios'),
+                            ),
+                          ],
+                        );
+                      },
                     );
                   },
-                );
-              },
-              child: Text('Modificar Datos del Post'),
+                  child: Text('Modificar Datos del Post'),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
   }
-}
+  }

@@ -25,36 +25,73 @@ class CustomGredCellView extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        print("Clic en la imagen");
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => EditarPost(postId: idPost),
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 1,
+        mainAxisSpacing: 200.0,
+        crossAxisSpacing: 200.0,
+      ),
+      padding: const EdgeInsets.all(8.0),
+      itemCount: 1,
+      itemBuilder: (BuildContext context, int index) {
+        return InkWell(
+          onTap: () {
+            print("Clic en la imagen");
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditarPost(postId: idPost,usuario: usuario, imagen: imagen),
+              ),
+            );
+          },
+          child: Container(
+            color: Colors.orangeAccent, // Cambié el color a beige
+            child: Stack(
+              children: [
+                if (imagen.isNotEmpty) ...[
+                  SizedBox(
+                    width: double.infinity,
+                    child: Image.network(
+                      imagen,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      color: Colors.black.withOpacity(0.5),
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        usuario,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.0,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
+                Positioned(
+                  bottom: 16.0,
+                  left: 5,
+                  child: Text(
+                    tituloPost,
+                    style: TextStyle(
+                      fontSize: dFontSize,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
-      child: Container(
-        height: 600, width: 600,
-        decoration: BoxDecoration(
-          image: DecorationImage(opacity: 0.3, image: NetworkImage(imagen), fit: BoxFit.cover,
-          ),
-        ),
-        color: Colors.amber[iColorCode],
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text("Usuario: " + usuario, style: TextStyle(fontSize: dFontSize)),
-            Text(tituloPost, style: TextStyle(fontSize: dFontSize)),
-            Text(sText, style: TextStyle(fontSize: dFontSize)),
-            TextButton(
-              onPressed: null,
-              child: Text("+", style: TextStyle(fontSize: dFontSize)),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
+

@@ -14,6 +14,7 @@ class CustomCellView extends StatelessWidget {
   final String tituloPost;
   final Function(int indice) onItemListClickedFun;
   final String idPost;
+  final String contenido;
 
   const CustomCellView({super.key,
 
@@ -26,6 +27,7 @@ class CustomCellView extends StatelessWidget {
     required this.onItemListClickedFun,
     required this.usuario,
     required this.idPost,
+    required this.contenido,
     required this.tituloPost});
 
   @override
@@ -55,7 +57,7 @@ class CustomCellView extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EditarPost(postId: idPost),
+                    builder: (context) => EditarPost(postId: idPost,usuario: usuario, imagen: imagen),
                   ),
                 );
               },
@@ -68,7 +70,7 @@ class CustomCellView extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text(tituloPost+"         ggg", textAlign: TextAlign.center,
+              child: Text(contenido, textAlign: TextAlign.center,
                 style: TextStyle(fontSize: dFuenteTamanyo, fontWeight: FontWeight.bold,
                 ),
               ),
