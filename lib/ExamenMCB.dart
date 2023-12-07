@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:examenmcb/Splash/SplashView.dart';
 
+import 'Singletone/DataHolder.dart';
 import 'onBoarding/PerfilView.dart';
 import 'onBoarding/RegisterView.dart';
 
@@ -19,7 +20,7 @@ class ExamenMCB extends StatelessWidget{
 @override
 Widget build(BuildContext context) {
   MaterialApp materialApp;
-
+  DataHolder().initPlatformAdmin(context);
     materialApp=MaterialApp(title: "Examen",
       routes: {
         '/splashview':(context) => SplashView(),
@@ -32,7 +33,7 @@ Widget build(BuildContext context) {
         '/mapaview':(context) => MapaView(),
         '/editarperfil':(context) => Editarperfil(),
       },
-      initialRoute: '/loginview',
+      initialRoute: '/splashview',
     );
 
   return materialApp;

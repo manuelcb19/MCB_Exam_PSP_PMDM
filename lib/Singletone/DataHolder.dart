@@ -7,6 +7,7 @@ import '../FirebaseObjects/FbPostId.dart';
 import '../FirebaseObjects/FbUsuario.dart';
 import 'FirebaseAdmin.dart';
 import 'GeolocAdmin.dart';
+import 'PlatformAdmin.dart';
 
 
 class DataHolder {
@@ -19,6 +20,7 @@ class DataHolder {
   late FbPostId selectedPost;
   GeolocAdmin geolocAdmin = GeolocAdmin();
   FbUsuario? usuario;
+  late PlatformAdmin platformAdmin;
 
   DataHolder._internal() {
   }
@@ -45,6 +47,10 @@ class DataHolder {
     print("docSnap DE DESCARGA loadFbUsuario------------->>>> ${docSnap.data()}");
     usuario=docSnap.data();
     return usuario;
+  }
+
+  void initPlatformAdmin(BuildContext context){
+    platformAdmin=PlatformAdmin(context: context);
   }
 
   void insertPostEnFBId(FbPostId postNuevo){

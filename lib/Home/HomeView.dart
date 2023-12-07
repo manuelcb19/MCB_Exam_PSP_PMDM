@@ -38,6 +38,8 @@ class _HomeViewState extends State<HomeView> {
   final Map<String,FbPostId> mapPosts = Map();
   final List<FbPostId> posts = [];
   final List<FbUsuario> listaUsuarios = [];
+  late Future<FbUsuario> _futurePerfil;
+  late String imagenurl;
 
   Map<String, dynamic> miDiccionario = {};
 
@@ -113,7 +115,11 @@ class _HomeViewState extends State<HomeView> {
 
   void conseguirUsuario() async {
 
-    perfil = await dataHolder.fbadmin.conseguirUsuario();
+    FbUsuario perfil = await dataHolder.fbadmin.conseguirUsuario();
+    setState(() {
+      this.perfil = perfil;
+    });
+
   }
 
   void onItemListClicked(int index){
@@ -130,7 +136,6 @@ class _HomeViewState extends State<HomeView> {
       {
         case 0:
           descargarPosts();
-          print("casa");
           if(posts.isEmpty)
           {
             print("la lista esta vacia");
@@ -163,10 +168,11 @@ class _HomeViewState extends State<HomeView> {
         child: celdasOLista(bIsList),
       ),
       bottomNavigationBar: CustomButton(onBotonesClicked: this.onBottonMenuPressed, texto: 'botonnavegacion',),
-      drawer: CustomDrawer(onItemTap: fHomeViewDrawerOnTap,),
+      drawer: CustomDrawer(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
       floatingActionButton:FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushNamed("/mapaview");
+          print(perfil.shint);
+          //Navigator.of(context).pushNamed("/mapaview");
         },
         child: Icon(Icons.add),
       ),
@@ -213,7 +219,7 @@ class _HomeViewState extends State<HomeView> {
         imagen: posts[index].sUrlImg,
         onItemListClickedFun:onItemListClicked,
         tituloPost:  posts[index].titulo,
-        usuario: posts[index].usuario, idPost: posts[index].id,);
+        usuario: posts[index].usuario, idPost: posts[index].id, contenido: posts[index].post,);
   }
 
 
@@ -221,6 +227,7 @@ class _HomeViewState extends State<HomeView> {
     return CustomGredCellView(
       sText: posts[index].post,
       dFontSize: 20,
+
       imagen: posts[index].sUrlImg,
       iColorCode: 0,
       usuario: posts[index].usuario,
@@ -247,7 +254,7 @@ class _HomeViewState extends State<HomeView> {
     } else {
       return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 5),
+              crossAxisCount: 2),
           itemCount: posts.length,
           itemBuilder: creadorDeItemMatriz
       );

@@ -71,6 +71,9 @@ class FirebaseAdmin {
     DocumentSnapshot<FbUsuario> docSnap = await enlace.get();
     usuario = docSnap.data()!;
 
+    print("--------------------------" + usuario.nombre);
+    print("--------------------------" + usuario.shint);
+
     return usuario;
   }
 

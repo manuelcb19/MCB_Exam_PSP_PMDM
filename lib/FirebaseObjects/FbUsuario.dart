@@ -20,7 +20,7 @@ class FbUsuario{
       ) {
     final data = snapshot.data();
     return FbUsuario(
-        shint: data?['sHint'] != null ? data!['sHint'] : "",
+        shint: data?['shint'] != null ? data!['shint'] : "",
         nombre: data?['nombre'] != null ? data!['nombre'] : "",
         edad: data?['edad'] != null ? data!['edad'] : 0,
         //geoloc:data?['geoloc'] != null ? data!['geoloc'] : GeoPoint(0, 0)

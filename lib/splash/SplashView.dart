@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../Singletone/DataHolder.dart';
+
 
 class SplashView extends StatefulWidget {
 
@@ -62,17 +64,25 @@ class _SplashViewState extends State<SplashView>{
 
   @override
   Widget build(BuildContext context) {
-
-    Column column=Column(
+    // TODO: implement build
+    return Stack(
       children: [
-        Image.asset("resources/imagenInicial.png",width: 300,
-            height: 450),
-        CircularProgressIndicator()
+        Positioned(
+            left: DataHolder().platformAdmin.getScreenWidth()*0.1,
+            top: DataHolder().platformAdmin.getScreenHeight()*0.1,
+            width: DataHolder().platformAdmin.getScreenWidth()*0.8,
+            height: DataHolder().platformAdmin.getScreenHeight()*0.8,
+            child: Image.asset("resources/imagenInicial.png",)
+        ),
+        Positioned(
+            left: DataHolder().platformAdmin.getScreenWidth()*0.1,
+            top: DataHolder().platformAdmin.getScreenHeight()*0.1+DataHolder().platformAdmin.getScreenHeight()*0.8,
+            width: DataHolder().platformAdmin.getScreenWidth()*0.5,
+            height: DataHolder().platformAdmin.getScreenHeight()*0.5,
+            child: CircularProgressIndicator()
+        ),
+
       ],
     );
-
-    return column;
-  }
-
-
+}
 }
