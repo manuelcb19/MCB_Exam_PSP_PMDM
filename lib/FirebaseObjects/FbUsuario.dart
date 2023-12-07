@@ -5,11 +5,13 @@ class FbUsuario{
    String nombre;
    int edad;
    String shint;
+   //GeoPoint geoloc;
 
   FbUsuario ({
     required this.nombre,
     required this.edad,
     required this.shint,
+    //required this.geoloc,
   });
 
   factory FbUsuario.fromFirestore(
@@ -20,7 +22,8 @@ class FbUsuario{
     return FbUsuario(
         shint: data?['sHint'] != null ? data!['sHint'] : "",
         nombre: data?['nombre'] != null ? data!['nombre'] : "",
-        edad: data?['edad'] != null ? data!['edad'] : 0
+        edad: data?['edad'] != null ? data!['edad'] : 0,
+        //geoloc:data?['geoloc'] != null ? data!['geoloc'] : GeoPoint(0, 0)
     );
   }
 
@@ -29,6 +32,7 @@ class FbUsuario{
       if (nombre != null) "nombre": nombre,
       if (edad != null) "edad": edad,
       if (shint != null) "shint": shint,
+      //if (geoloc != null) "geoloc": geoloc,
     };
   }
 }
