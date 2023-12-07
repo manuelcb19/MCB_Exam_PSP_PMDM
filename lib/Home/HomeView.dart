@@ -171,8 +171,7 @@ class _HomeViewState extends State<HomeView> {
       drawer: CustomDrawer(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
       floatingActionButton:FloatingActionButton(
         onPressed: () {
-          print(perfil.shint);
-          //Navigator.of(context).pushNamed("/mapaview");
+          Navigator.of(context).pushNamed("/postcreateview");
         },
         child: Icon(Icons.add),
       ),
