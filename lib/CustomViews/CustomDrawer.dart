@@ -24,13 +24,13 @@ class CustomDrawer extends StatelessWidget {
               children: [
                 Image.network(
                   imagen,
-                  width: 100, // ajusta el ancho según tus necesidades
-                  height: 100, // ajusta la altura según tus necesidades
+                  width: 100,
+                  height: 100,
                 ),
                 Text(
                   "Drawer Examen",
                   style: TextStyle(color: Colors.white,
-                      fontSize: 20), // Añade un tamaño de fuente según tus necesidades
+                      fontSize: 20),
                 ),
               ],
             ),
@@ -49,7 +49,6 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: Image.asset(
                 'resources/imagenInicial.png', width: 50, height: 50),
-            // Ajusta width y height según tus necesidades
             title: const Text('Cerrar Sesion'),
             onTap: () {
               onItemTap!(0);
@@ -58,7 +57,7 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: Image.asset(
                 'resources/imagenInicial.png', width: 50, height: 50),
-            // Ajusta width y height según tus necesidades
+
             title: const Text('Consultar Temperatura'),
             onTap: () {
               onItemTap!(2);
@@ -68,7 +67,6 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: Image.asset(
                 'resources/imagenInicial.png', width: 50, height: 50),
-            // Ajusta width y height según tus necesidades
             title: const Text('Consultar Mapa'),
             onTap: () {
               onItemTap!(3);

@@ -33,7 +33,6 @@ class _HomeScreenState extends State<Editarperfil> {
 
   Future<void> cargarUsuario() async {
     usuario = await conexion.fbadmin.conseguirUsuario();
-    print("-----------------------------------------");
     print(usuario.shint.toString());
     print(usuario.nombre.toString());
     print(usuario.edad.toString());
@@ -68,17 +67,12 @@ class _HomeScreenState extends State<Editarperfil> {
                 .now()
                 .millisecondsSinceEpoch
                 .toString() + ".jpg";
-    print("RUTA DONDE VA A GUARDARSE LA IMAGEN: " + rutaEnNube);
 
     final rutaAFicheroEnNube = storageRef.child(rutaEnNube);
 
     final metadata = SettableMetadata(contentType: "image/jpeg");
     try {
       await rutaAFicheroEnNube.putFile(_imagePreview, metadata);
-
-      print("SE HA SUBIDO LA IMAGEN");
-
-      // Obtén la URL de la imagen después de subirla
       String url = await rutaAFicheroEnNube.getDownloadURL();
       print("URL de la imagen: $url");
       return url;
@@ -114,7 +108,6 @@ class _HomeScreenState extends State<Editarperfil> {
             Text("Edad: " + edad.toString(), style: TextStyle(fontSize: 18)),
             ElevatedButton(
               onPressed: () {
-                // Mostrar un cuadro de diálogo para que el usuario ingrese nuevos datos
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -135,13 +128,6 @@ class _HomeScreenState extends State<Editarperfil> {
                             },
                             decoration: InputDecoration(
                                 labelText: 'Nueva Edad'),
-                          ),
-                          TextField(
-                            onChanged: (value) {
-                              imagen = value;
-                            },
-                            decoration: InputDecoration(
-                                labelText: 'Nuevo Otro Dato'),
                           ),
                           ElevatedButton(
                             onPressed: () async {

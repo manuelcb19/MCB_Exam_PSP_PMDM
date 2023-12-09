@@ -8,7 +8,6 @@ class FbPostId{
   final String titulo;
   final String sUrlImg;
   final String id;
-  //final String idPost;
 
   FbPostId ({
     required this.post,
@@ -40,7 +39,6 @@ class FbPostId{
     String? usuario,
     String? titulo,
     String? sUrlImg,
-    // Agrega otros campos si es necesario
   }) {
     return FbPostId(
       id: id ?? this.id,
@@ -48,7 +46,6 @@ class FbPostId{
       usuario: usuario ?? this.usuario,
       titulo: titulo ?? this.titulo,
       sUrlImg: sUrlImg ?? this.sUrlImg,
-      // Agrega otros campos si es necesario
     );
   }
 

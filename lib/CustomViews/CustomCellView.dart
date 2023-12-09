@@ -53,7 +53,6 @@ class CustomCellView extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                print("Clic en la imagen");
                 Navigator.push(
                   context,
                   MaterialPageRoute(

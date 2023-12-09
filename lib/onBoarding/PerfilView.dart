@@ -98,7 +98,22 @@ class _PerfilViewState extends State<PerfilView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Mostrar la imagen predefinida y la imagen seleccionada
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 60, vertical: 16),
+                child: customTextField(
+                  tecUsername: tecNombre,
+                  oscuro: false,
+                  sHint: "Introduzca su usuario",
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 60, vertical: 16),
+                child: customTextField(
+                  tecUsername: tecEdad,
+                  oscuro: false,
+                  sHint: "Introduzca su edad",
+                ),
+              ),
               Column(
                 children: [
                   if (mostrarPredefinida)
@@ -116,28 +131,11 @@ class _PerfilViewState extends State<PerfilView> {
                     ),
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 60, vertical: 16),
-                child: customTextField(
-                  tecUsername: tecNombre,
-                  oscuro: false,
-                  sHint: "Introduzca su usuario",
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 60, vertical: 16),
-                child: customTextField(
-                  tecUsername: tecEdad,
-                  oscuro: false,
-                  sHint: "Introduzca su edad",
-                ),
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
                     onPressed: () async {
-                      // Permite al usuario seleccionar una imagen desde la galería
                       await _getImage();
                     },
                     child: Text('Seleccionar Imagen desde Galería'),

@@ -11,14 +11,6 @@ class FirebaseAdmin {
   FirebaseFirestore db = FirebaseFirestore.instance;
   FbUsuario? usuario;
 
-  //String uid = FirebaseAuth.instance.currentUser!.uid;
-
-
-  //String conseguiruid(){
-
-  //return uid;
-  //}
-
   Future<FbUsuario?> loadFbUsuario() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     DocumentReference<FbUsuario> ref = db.collection("Usuarios")
@@ -71,9 +63,6 @@ class FirebaseAdmin {
     DocumentSnapshot<FbUsuario> docSnap = await enlace.get();
     usuario = docSnap.data()!;
 
-    print("--------------------------" + usuario.nombre);
-    print("--------------------------" + usuario.shint);
-
     return usuario;
   }
 
@@ -102,18 +91,15 @@ class FirebaseAdmin {
         // Agrega aquí otros campos si los tienes
       };
 
-      // Actualizar el documento del post en la colección principal
       await postRef.update(postData);
     } else {
       print("No se encontró el documento con el ID proporcionado.");
       print(postId.toString());
-      // Manejar el caso en el que no se encuentra el documento, como mostrar un mensaje al usuario o realizar otra acción.
     }
   }
   Future<String?> getPostReferenceByImagen(String codigoReferenciaImagen) async {
     String uidUsuario = FirebaseAuth.instance.currentUser!.uid;
 
-    // Realizar una consulta para obtener el post específico por el código de referencia de la imagen
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("PostUsuario")
         .where('sUrlImg', isEqualTo: codigoReferenciaImagen)
@@ -121,14 +107,11 @@ class FirebaseAdmin {
         .get();
 
     if (querySnapshot.docs.isNotEmpty) {
-      // Obtener el ID del primer documento en la consulta
       String postId = querySnapshot.docs.first.id;
 
-      // Retornar el ID del post
       return postId;
     }
 
-    // Si no se encuentra ningún documento, retornar null
     return null;
   }
 }

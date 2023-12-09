@@ -23,7 +23,6 @@ class HttpAdmin{
       var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
       print("MAPA ENTERO: " + jsonResponse.toString());
 
-      // Obtener la temperatura actual
       var jsonHourly = jsonResponse['hourly'];
       var jsonTimes = jsonHourly['time'];
       var jsonTiempoActual = jsonTimes[0];
@@ -32,7 +31,6 @@ class HttpAdmin{
 
       double temperaturaActual = jsonTemperaturaActual.toDouble();
 
-      // Retornar la temperatura en lugar de imprimir
       return temperaturaActual;
     } else {
       print('Request failed with status: ${response.statusCode}.');

@@ -43,7 +43,7 @@ class _EditarPostState extends State<EditarPost> {
   }
 
   Future<void> updateImage() async {
-    if (_isDisposed) return; // Verificar si el widget ha sido eliminado
+    if (_isDisposed) return;
 
     XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
@@ -51,11 +51,9 @@ class _EditarPostState extends State<EditarPost> {
         _imagePreview = File(image.path);
       });
 
-      // Actualiza la URL de la imagen en Firebase Storage
       String newImageUrl = await setearUrlImagen();
 
-      // Actualiza la URL de la imagen en el estado local
-      if (!_isDisposed) { // Verificar nuevamente antes de actualizar el estado
+      if (!_isDisposed) {
         setState(() {
           imagenUrl = newImageUrl;
         });
@@ -75,11 +73,9 @@ class _EditarPostState extends State<EditarPost> {
         _imagePreview = File(image.path);
       });
 
-      // Actualiza la URL de la imagen en Firebase Storage
       String newImageUrl = await setearUrlImagen();
 
-      // Actualiza la URL de la imagen en el estado local
-      if (!_isDisposed) { // Verificar nuevamente antes de actualizar el estado
+      if (!_isDisposed) {
         setState(() {
           imagenUrl = newImageUrl;
         });
@@ -103,7 +99,6 @@ class _EditarPostState extends State<EditarPost> {
 
       print("SE HA SUBIDO LA IMAGEN");
 
-      // Obtén la URL de la imagen después de subirla
       String url = await rutaAFicheroEnNube.getDownloadURL();
       print("URL de la imagen: $url");
       return url;
@@ -162,7 +157,6 @@ class _EditarPostState extends State<EditarPost> {
                               ),
                               ElevatedButton(
                                 onPressed: () async {
-                                  // Permite al usuario seleccionar una imagen desde la galería
                                   await updateImageCamera();
                                 },
                                 child: Text('Seleccionar Imagen desde camera'),
@@ -178,10 +172,9 @@ class _EditarPostState extends State<EditarPost> {
                           actions: [
                             ElevatedButton(
                               onPressed: () {
-                                // Cerrar el cuadro de diálogo y actualizar los datos en Firestore
                                 Navigator.of(context).pop();
                                 conexion.fbadmin.updatePostData(titulo, postContenido, imagenUrl, widget.usuario.toString(), widget.postId.toString());
-                                print("wwwwwwwwwwwwwwwwwwww" + imagenUrl);
+                                print( imagenUrl);
                                 setState(() {});
                               },
                               child: Text('Guardar Cambios'),
