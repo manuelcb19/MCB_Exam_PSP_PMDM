@@ -257,37 +257,40 @@ class _HomeViewState extends State<HomeView> {
         );
       }
     }
-    else if (indice == 4)
-    {
-      Map<String, dynamic> pokemonData = await DataHolder().httpAdmin.fetchPokemonData('pikachu');
-      List<String> abilities = [];
-
-// Verificar si el diccionario contiene la clave 'abilities'
-      if (pokemonData.containsKey('abilities')) {
-        // Obtener la lista de habilidades
-        List<dynamic> abilitiesList = pokemonData['abilities'];
-
-        // Extraer los nombres de las habilidades
-        abilities = abilitiesList
-            .map<String>((ability) => ability['ability']['name'])
-            .toList();
-      }
+    else if (indice == 4) {
+      TextEditingController _pokemonNameController = TextEditingController();
 
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Información'),
+            title: Text('Buscar Pokémon'),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('las Habilidades pasivas del pokemon son: ${abilities.join(', ')}'),
+                TextField(
+                  controller: _pokemonNameController,
+                  decoration: InputDecoration(labelText: 'Nombre del Pokémon'),
+                ),
               ],
             ),
             actions: [
               TextButton(
-                child: Text('Aceptar'),
+                child: Text('Buscar'),
+                onPressed: () async {
+                  String pokemonName = _pokemonNameController.text.trim().toLowerCase();
+                  if (pokemonName.isNotEmpty) {
+                    Navigator.of(context).pop(); // Cerrar el diálogo de búsqueda
+
+                    Map<String, dynamic> pokemonData =
+                    await DataHolder().httpAdmin.fetchPokemonData(pokemonName);
+                    _showPokemonInfoDialog(context, pokemonData);
+                  }
+                },
+              ),
+              TextButton(
+                child: Text('Cancelar'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -296,7 +299,6 @@ class _HomeViewState extends State<HomeView> {
           );
         },
       );
-
     }
 
     else if (indice == 5)
@@ -327,6 +329,46 @@ class _HomeViewState extends State<HomeView> {
         );
 
       }
+  }
+
+  void _showPokemonInfoDialog(BuildContext context, Map<String, dynamic> pokemonData) {
+    List<String> abilities = [];
+
+    // Verificar si el diccionario contiene la clave 'abilities'
+    if (pokemonData.containsKey('abilities')) {
+      // Obtener la lista de habilidades
+      List<dynamic> abilitiesList = pokemonData['abilities'];
+
+      // Extraer los nombres de las habilidades
+      abilities = abilitiesList
+          .map<String>((ability) => ability['ability']['name'])
+          .toList();
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Información'),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Nombre: ${pokemonData['name']}'),
+              Text('Habilidades: ${abilities.join(', ')}'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text('Aceptar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget? creadorDeItemLista(BuildContext context, int index) {
