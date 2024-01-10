@@ -71,7 +71,22 @@ class CustomDrawer extends StatelessWidget {
             onTap: () {
               onItemTap!(3);
             },
-
+          ),
+             ListTile(
+              leading: Image.asset(
+                  'resources/imagenInicial.png', width: 50, height: 50),
+               title: const Text('Consultar Pokemon'),
+                onTap: () {
+                onItemTap!(4);
+               },
+             ),
+          ListTile(
+            leading: Image.asset(
+                'resources/imagenInicial.png', width: 50, height: 50),
+            title: const Text('Chiste Aleatorio'),
+            onTap: () {
+              onItemTap!(5);
+            },
           ),
         ],
       ),

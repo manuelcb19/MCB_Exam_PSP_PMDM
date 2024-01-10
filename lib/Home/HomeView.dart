@@ -211,8 +211,7 @@ class _HomeViewState extends State<HomeView> {
         Position currentPosition = await DataHolder().geolocAdmin.registrarCambiosLoc();
 
         double temperatura = await DataHolder().httpAdmin.pedirTemperaturasEn(currentPosition.latitude, currentPosition.longitude);
-        String chuckNorrisJoke = await DataHolder().httpAdmin.fetchChuckNorrisJoke();
-        Map<String, dynamic> pokemonData = await DataHolder().httpAdmin.fetchPokemonData('pikachu');
+
 
         showDialog(
           context: context,
@@ -224,8 +223,7 @@ class _HomeViewState extends State<HomeView> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text('La temperatura actual es de: $temperatura'),
-                  Text('Broma de Chuck Norris: $chuckNorrisJoke'),
-                  Text('Datos de Pokemon: $pokemonData'),
+
                 ],
               ),
               actions: [
@@ -258,9 +256,77 @@ class _HomeViewState extends State<HomeView> {
           },
         );
       }
-    } else {
-      Navigator.of(context).pushNamed('/mapaview');
     }
+    else if (indice == 4)
+    {
+      Map<String, dynamic> pokemonData = await DataHolder().httpAdmin.fetchPokemonData('pikachu');
+      List<String> abilities = [];
+
+// Verificar si el diccionario contiene la clave 'abilities'
+      if (pokemonData.containsKey('abilities')) {
+        // Obtener la lista de habilidades
+        List<dynamic> abilitiesList = pokemonData['abilities'];
+
+        // Extraer los nombres de las habilidades
+        abilities = abilitiesList
+            .map<String>((ability) => ability['ability']['name'])
+            .toList();
+      }
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Información'),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('las Habilidades pasivas del pokemon son: ${abilities.join(', ')}'),
+              ],
+            ),
+            actions: [
+              TextButton(
+                child: Text('Aceptar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+
+    }
+
+    else if (indice == 5)
+      {
+        String chuckNorrisJoke = await DataHolder().httpAdmin.fetchChuckNorrisJoke();
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Información'),
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Broma de Chuck Norris: $chuckNorrisJoke'),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  child: Text('Aceptar'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+
+      }
   }
 
   Widget? creadorDeItemLista(BuildContext context, int index) {
