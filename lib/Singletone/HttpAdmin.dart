@@ -1,12 +1,8 @@
-import 'package:examenmcb/CustomViews/CustomDialog.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-class HttpAdmin{
-
-
+class HttpAdmin {
   HttpAdmin();
-
 
   Future<double> pedirTemperaturasEn(double lat, double lon) async {
     var url = Uri.https('api.open-meteo.com', '/v1/forecast', {
@@ -31,6 +27,10 @@ class HttpAdmin{
 
       double temperaturaActual = jsonTemperaturaActual.toDouble();
 
+      // Ahora, también obtenemos datos de PokeAPI y Chuck Norris Jokes
+      fetchPokemonData('pikachu'); // Puedes cambiar 'pikachu' por otro Pokémon
+      fetchChuckNorrisJoke();
+
       return temperaturaActual;
     } else {
       print('Request failed with status: ${response.statusCode}.');
@@ -40,5 +40,28 @@ class HttpAdmin{
     }
   }
 
+  Future<Map<String, dynamic>> fetchPokemonData(String pokemonName) async {
+    var url = Uri.https('pokeapi.co', '/api/v2/pokemon/$pokemonName');
 
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      return convert.jsonDecode(response.body) as Map<String, dynamic>;
+    } else {
+      throw Exception('Error al obtener datos del Pokémon');
+    }
+  }
+
+  Future<String> fetchChuckNorrisJoke() async {
+    var url = Uri.https('api.chucknorris.io', '/jokes/random');
+
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
+      return jsonResponse['value'];
+    } else {
+      throw Exception('Error al obtener la broma de Chuck Norris');
+    }
+  }
 }

@@ -206,24 +206,61 @@ class _HomeViewState extends State<HomeView> {
         '/editarperfil',
         arguments: {/* Puedes pasar argumentos si es necesario */},
       );
-    } else if (indice == 2) {
+    }  else if (indice == 2) {
       try {
         Position currentPosition = await DataHolder().geolocAdmin.registrarCambiosLoc();
 
         double temperatura = await DataHolder().httpAdmin.pedirTemperaturasEn(currentPosition.latitude, currentPosition.longitude);
+        String chuckNorrisJoke = await DataHolder().httpAdmin.fetchChuckNorrisJoke();
+        Map<String, dynamic> pokemonData = await DataHolder().httpAdmin.fetchPokemonData('pikachu');
 
-        CustomDialog.show(context, 'La temperatura actual es de: $temperatura');
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Información'),
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('La temperatura actual es de: $temperatura'),
+                  Text('Broma de Chuck Norris: $chuckNorrisJoke'),
+                  Text('Datos de Pokemon: $pokemonData'),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  child: Text('Aceptar'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
       } catch (e) {
-
-        CustomDialog.show(context, 'Error al obtener la temperatura');
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error'),
+              content: Text('Error al obtener la temperatura'),
+              actions: [
+                TextButton(
+                  child: Text('Aceptar'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
       }
+    } else {
+      Navigator.of(context).pushNamed('/mapaview');
     }
-    else
-      {
-
-        Navigator.of(context).pushNamed('/mapaview');
-
-      }
   }
 
   Widget? creadorDeItemLista(BuildContext context, int index) {
