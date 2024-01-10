@@ -204,7 +204,7 @@ class _HomeViewState extends State<HomeView> {
     } else if (indice == 1) {
       Navigator.of(context).pushNamed(
         '/editarperfil',
-        arguments: {/* Puedes pasar argumentos si es necesario */},
+        arguments: {},
       );
     }  else if (indice == 2) {
       try {
@@ -329,7 +329,99 @@ class _HomeViewState extends State<HomeView> {
         );
 
       }
+
+    else if (indice == 6) {
+      TextEditingController _searchController = TextEditingController();
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Buscar Post por Título'),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Ingrese el título a buscar',
+                    contentPadding: EdgeInsets.all(16.0),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    String searchValue = _searchController.text.trim();
+                    if (searchValue.isNotEmpty) {
+                      Navigator.of(context).pop(); // Cerrar el diálogo de búsqueda
+
+                      List<Map<String, dynamic>> searchResults =
+                      await DataHolder().fbadmin.searchPostsByTitle(searchValue);
+
+                      if (searchResults.isNotEmpty) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Resultados de la Búsqueda'),
+                              content: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  for (var result in searchResults)
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('ID del Post: ${result['Idpost']}'),
+                                        Text('Título: ${result['Titulo']}'),
+                                        Text('Usuario: ${result['Usuario']}'),
+                                        // Agrega aquí otros campos que desees mostrar
+                                      ],
+                                    ),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  child: Text('Aceptar'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Resultados de la Búsqueda'),
+                              content: Text('No se encontraron posts con el título proporcionado.'),
+                              actions: [
+                                TextButton(
+                                  child: Text('Aceptar'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    }
+                  },
+                  child: Text('Buscar'),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
   }
+
 
   void _showPokemonInfoDialog(BuildContext context, Map<String, dynamic> pokemonData) {
     List<String> abilities = [];
