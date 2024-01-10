@@ -50,6 +50,21 @@ class FirebaseAdmin {
     }
   }
 
+
+  Future<List<Map<String, dynamic>>> searchPostsByTitle(String searchValue) async {
+    QuerySnapshot querySnapshot = await db
+        .collection('PostUsuario')
+        .where('Titulo', isGreaterThanOrEqualTo: searchValue)
+        .get();
+
+    return querySnapshot.docs
+        .where((doc) =>
+    (doc['Titulo'] as String).contains(searchValue) ||
+        (doc['Usuario'] as String).contains(searchValue))
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+  }
+
   Future<FbUsuario> conseguirUsuario() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     print(uid);
