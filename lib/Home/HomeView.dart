@@ -259,15 +259,39 @@ class _HomeViewState extends State<HomeView> {
       }
     }
 
-    else if (indice == 3)
-    {
+    else if (indice == 7) {
 
       Position currentPosition = await DataHolder().geolocAdmin.registrarCambiosLoc();
       GeoPoint currentGeoPoint = GeoPoint(currentPosition.latitude, currentPosition.longitude);
       await DataHolder().geolocAdmin.agregarUbicacionEnFirebase(currentGeoPoint);
-      //Navigator.of(context).pushNamed('/mapaview');
-      //aqui
+      List<String> usersInRange = await DataHolder().geolocAdmin.obtenerUsuariosEnRango();
 
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Usuarios en rango de 5 km:'),
+            content: Column(
+              children: usersInRange
+                  .map(
+                    (userId) => Text(
+                  userId ?? 'Usuario sin ID',
+                  // 'Usuario sin ID' se mostrará si userId es nulo
+                ),
+              )
+                  .toList(),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Cerrar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
     else if (indice == 4) {
       TextEditingController _pokemonNameController = TextEditingController();
@@ -432,6 +456,10 @@ class _HomeViewState extends State<HomeView> {
         },
       );
     }
+    else if(indice == 3)
+      {
+        Navigator.of(context).pushNamed('/mapaview');
+      }
   }
 
 
