@@ -1,7 +1,13 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 
 class GeolocAdmin {
+
+  final CollectionReference localizacionCollection =
+  FirebaseFirestore.instance.collection('localizacion');
+
   Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -42,4 +48,17 @@ class GeolocAdmin {
       throw Exception('Error al obtener la posición');
     }
   }
+  Future<void> agregarUbicacionEnFirebase(GeoPoint ubicacion) async {
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      await localizacionCollection.doc(uid).set({
+        'local': ubicacion,
+        'idUser': uid,
+      });
+    } catch (e) {
+      print('Error al agregar la ubicación en Firebase: $e');
+      throw Exception('Error al agregar la ubicación en Firebase');
+    }
+  }
 }
+

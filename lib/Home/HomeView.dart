@@ -206,6 +206,7 @@ class _HomeViewState extends State<HomeView> {
         '/editarperfil',
         arguments: {},
       );
+
     }  else if (indice == 2) {
       try {
         Position currentPosition = await DataHolder().geolocAdmin.registrarCambiosLoc();
@@ -256,6 +257,17 @@ class _HomeViewState extends State<HomeView> {
           },
         );
       }
+    }
+
+    else if (indice == 3)
+    {
+
+      Position currentPosition = await DataHolder().geolocAdmin.registrarCambiosLoc();
+      GeoPoint currentGeoPoint = GeoPoint(currentPosition.latitude, currentPosition.longitude);
+      await DataHolder().geolocAdmin.agregarUbicacionEnFirebase(currentGeoPoint);
+      //Navigator.of(context).pushNamed('/mapaview');
+      //aqui
+
     }
     else if (indice == 4) {
       TextEditingController _pokemonNameController = TextEditingController();
